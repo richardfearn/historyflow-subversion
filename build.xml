@@ -1,0 +1,28 @@
+<project name="History Flow Subversion plugin" default="deploy-plugin-jar" basedir=".">
+
+	<property file="build.properties" />
+
+	<target name="make-plugin-jar">
+		<!-- Create the build directory -->
+		<mkdir dir="build" />
+			
+		<!-- Delete old JAR -->
+		<delete file="build/${plugin.jar}" />
+		
+		<!-- Create JAR -->
+		<jar destfile="build/${plugin.jar}" manifest="manifest.mf">
+			<fileset dir="bin">
+				<include name="**" />
+			</fileset>
+		</jar>
+	</target>
+	
+	<target name="deploy-plugin-jar" depends="make-plugin-jar">
+		<copy file="build/${plugin.jar}" todir="${historyflow.dir}/plugins" overwrite="yes" />
+	</target>
+	
+	<target name="run-historyflow" depends="deploy-plugin-jar">
+		<java dir="${historyflow.dir}" fork="true" jar="${historyflow.dir}/historyflow.jar" />
+	</target>
+	
+</project>
