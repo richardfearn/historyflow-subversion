@@ -13,6 +13,7 @@ import java.util.prefs.Preferences;
 import org.tmatesoft.svn.core.SVNLogEntry;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
+import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
 import org.tmatesoft.svn.core.io.SVNFileRevision;
 import org.tmatesoft.svn.core.io.SVNLocationEntry;
@@ -129,7 +130,9 @@ public class SubversionHistoryProvider implements IHistoryProvider {
 		// List of revisions
 		List<IVersion> versions = new Vector<IVersion>();
 
-		// Set up the repository factory
+		// Set up the repository factories, as described in the javadoc for
+		// SVNRepository
+		DAVRepositoryFactory.setup();
 		SVNRepositoryFactoryImpl.setup();
 
 		// Obtain the repository
@@ -145,24 +148,27 @@ public class SubversionHistoryProvider implements IHistoryProvider {
 		long latestRevision = repository.getLatestRevision();
 		progressDisplay.setMessage("Latest revision is " + latestRevision);
 
-		// Get all the revisions for the file
+		// Get all the revisions for the file. The Collection contains
+		// SVNFileRevision objects
 		Collection revisions = repository.getFileRevisions(filePath, null, 0, latestRevision);
 		progressDisplay.setMessage("File has " + revisions.size());
 
-		// The revision objects don't specify the times when the file was
-		// changed, because Subversion revisions apply to the repository as a
-		// whole, not to individual files. We therefore need to create a map
-		// showing when each revision was committed
-		progressDisplay.setMessage("Determining date of each revision");
+		// Get the list of revision numbers for the file
+		long[] revisionNumbers = getRevisionList(revisions);
+
+		// The SVNFileRevision objects can be used to get a date and author
+		// for each revision (via the svn:date and svn:author revision
+		// properties). Instead, we'll get the dates from the log entries (and
+		// we might as well get the authors from there, too).
+		progressDisplay.setMessage("Determining date and author of each revision");
 		Map<Long, Date> revisionDates = new HashMap<Long, Date>();
+		Map<Long, String> revisionAuthors = new HashMap<Long, String>();
 		Collection logEntries = repository.log(new String[] { filePath }, null, 0, latestRevision, false, false);
 		for (Object o : logEntries) {
 			SVNLogEntry logEntry = (SVNLogEntry) o;
 			revisionDates.put(logEntry.getRevision(), logEntry.getDate());
+			revisionAuthors.put(logEntry.getRevision(), logEntry.getAuthor());
 		}
-
-		// Get the list of revision numbers for the file
-		long[] revisionNumbers = getRevisionList(revisions);
 
 		// Read each revision. The file may have had different names in the
 		// past, so we have to determine what its name was for each revision
@@ -185,7 +191,7 @@ public class SubversionHistoryProvider implements IHistoryProvider {
 			dv.setComment("revision " + revision);
 			dv.setDate(revisionDates.get(revision));
 			dv.setContent(new String(baos.toByteArray()));
-			dv.setAuthor("rich");
+			dv.setAuthor(revisionAuthors.get(revision));
 			versions.add(dv);
 		}
 
