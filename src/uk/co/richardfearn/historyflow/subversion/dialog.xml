@@ -1,16 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<dialog size="400,200" title="Choose a Subversion file" modal="true">
+<dialog title="Choose a Subversion file" modal="true" resizable="false">
 
-	<panel layout="GridLayout(4,2)" constraints="BorderLayout.CENTER">
-		<label labelfor="textUrl" text="URL:" />
-		<textfield id="textUrl" columns="20" />
-		<label labelfor="textUsername" text="Username:" />
-		<textfield id="textUsername" columns="20" />
-		<label labelfor="textPassword" text="Password:" />
-		<passwordfield id="textPassword" columns="20" />
-		<label labelfor="textFilePath" text="Path to file:" />
-		<textfield id="textFilePath" columns="20" />
+	<panel layout="GridBagLayout" constraints="BorderLayout.CENTER">
+		<label labelfor="textUrl" text="URL:">
+			<gridbagconstraints insets="5,5,5,5" fill="GridBagConstraints.NONE" anchor="GridBagConstraints.EAST" gridx="0" gridy="0" weightx="0" weighty="0" />
+		</label>
+		<textfield id="textUrl" columns="30">
+			<gridbagconstraints  insets="5,0,5,5" fill="GridBagConstraints.HORIZONTAL" gridx="1" gridy="0" weightx="1" weighty="0" />
+		</textfield>
+		
+		<label labelfor="textUsername" text="Username:">
+			<gridbagconstraints insets="0,5,5,5" fill="GridBagConstraints.NONE" anchor="GridBagConstraints.EAST" gridx="0" gridy="1" weightx="0" weighty="0" />
+		</label>
+		<textfield id="textUsername" columns="30">
+			<gridbagconstraints insets="0,0,5,5" fill="GridBagConstraints.HORIZONTAL" gridx="1" gridy="1" weightx="1" weighty="0" />
+		</textfield>
+		
+		<label labelfor="textPassword" text="Password:">
+			<gridbagconstraints insets="0,5,5,5" fill="GridBagConstraints.NONE" anchor="GridBagConstraints.EAST" gridx="0" gridy="2" weightx="0" weighty="0" />
+		</label>
+		<passwordfield id="textPassword" columns="30">
+			<gridbagconstraints insets="0,0,5,5" fill="GridBagConstraints.HORIZONTAL" gridx="1" gridy="2" weightx="1" weighty="0" />
+		</passwordfield>
+		
+		<label labelfor="textFilePath" text="Path to file:">
+			<gridbagconstraints insets="0,5,0,5" fill="GridBagConstraints.NONE" anchor="GridBagConstraints.EAST" gridx="0" gridy="3" weightx="0" weighty="0" />
+		</label>
+		<textfield id="textFilePath" columns="30">
+			<gridbagconstraints insets="0,0,0,5" fill="GridBagConstraints.HORIZONTAL" gridx="1" gridy="3" weightx="1" weighty="0" />
+		</textfield>
 	</panel>
 	
 	<panel layout="FlowLayout" constraints="BorderLayout.SOUTH">

@@ -50,9 +50,11 @@ public class SubversionDialog implements ActionListener, DocumentListener {
 		URL url = getClass().getResource(DIALOG_XML_FILE);
 		dialog = new SwingEngine(this).render(url);
 		
+		// Fill in values, and set OK button state accordingly
 		textUrl.setText(defaultUrl);
 		textUsername.setText(defaultUsername);
 		textFilePath.setText(defaultFilePath);
+		setOkButtonState();
 
 		textUrl.getDocument().addDocumentListener(this);
 		textUsername.getDocument().addDocumentListener(this);
@@ -61,6 +63,8 @@ public class SubversionDialog implements ActionListener, DocumentListener {
 		
 		buttonOk.addActionListener(this);
 		buttonCancel.addActionListener(this);
+		
+		((JDialog) dialog).pack();
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -94,10 +98,8 @@ public class SubversionDialog implements ActionListener, DocumentListener {
 	// Update enabled state of OK button
 	private void setOkButtonState() {
 		boolean gotUrl = textUrl.getText().trim().length() > 0;
-		boolean gotUsername = textUsername.getText().trim().length() > 0;
-		boolean gotPassword = textPassword.getPassword().length > 0;
 		boolean gotFilePath = textFilePath.getText().trim().length() > 0;
-		buttonOk.setEnabled(gotUrl && gotUsername && gotPassword && gotFilePath);
+		buttonOk.setEnabled(gotUrl && gotFilePath);
 	}
 
 	public String getUrl() {
