@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dialog size="400,200" title="Choose a Subversion file" modal="true">
+
+	<panel layout="GridLayout(4,2)" constraints="BorderLayout.CENTER">
+		<label labelfor="textUrl" text="URL:" />
+		<textfield id="textUrl" columns="20" />
+		<label labelfor="textUsername" text="Username:" />
+		<textfield id="textUsername" columns="20" />
+		<label labelfor="textPassword" text="Password:" />
+		<passwordfield id="textPassword" columns="20" />
+		<label labelfor="textFilePath" text="Path to file:" />
+		<textfield id="textFilePath" columns="20" />
+	</panel>
+	
+	<panel layout="FlowLayout" constraints="BorderLayout.SOUTH">
+		<button id="buttonOk" text="OK" action="submit" />
+		<button id="buttonCancel" text="Cancel" action="cancel" />
+	</panel>
+
+</dialog>

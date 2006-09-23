@@ -1,24 +1,26 @@
 package uk.co.richardfearn.historyflow.subversion;
 
-import java.awt.GridLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import org.swixml.SwingEngine;
 
 /**
  * <p>Dialog that allows a file in a Subversion repository to be selected.</p>
  * 
  * @author Richard Fearn
  */
-public class SubversionDialog extends JDialog implements ActionListener, DocumentListener {
+public class SubversionDialog implements ActionListener, DocumentListener {
 
 	private String url;
 
@@ -40,51 +42,25 @@ public class SubversionDialog extends JDialog implements ActionListener, Documen
 
 	private JButton buttonCancel;
 
+	private Component dialog;
+	
+	private static final String DIALOG_XML_FILE = "dialog.xml";
+	
 	public SubversionDialog(JFrame parent, String defaultUrl, String defaultUsername, String defaultFilePath) throws Exception {
-		super(parent, "Subversion file", true);
+		URL url = getClass().getResource(DIALOG_XML_FILE);
+		dialog = new SwingEngine(this).render(url);
+		
+		textUrl.setText(defaultUrl);
+		textUsername.setText(defaultUsername);
+		textFilePath.setText(defaultFilePath);
 
-		setLayout(new GridLayout(5, 2));
-
-		// Create text fields and labels
-		JLabel labelUrl = new JLabel("URL:");
-		textUrl = new JTextField(defaultUrl, 20);
-		JLabel labelUsername = new JLabel("Username:");
-		textUsername = new JTextField(defaultUsername, 20);
-		JLabel labelPassword = new JLabel("Password:");
-		textPassword = new JPasswordField(20);
-		JLabel labelFilePath = new JLabel("Path to file:");
-		textFilePath = new JTextField(defaultFilePath, 20);
-
-		// Create buttons
-		buttonOk = new JButton("OK");
-		buttonOk.setEnabled(false);
-		buttonCancel = new JButton("Cancel");
-
-		// Add text fields and labels
-		getContentPane().add(labelUrl);
-		getContentPane().add(textUrl);
-		getContentPane().add(labelUsername);
-		getContentPane().add(textUsername);
-		getContentPane().add(labelPassword);
-		getContentPane().add(textPassword);
-		getContentPane().add(labelFilePath);
-		getContentPane().add(textFilePath);
-
-		// Add buttons
-		getContentPane().add(buttonOk);
-		getContentPane().add(buttonCancel);
-
-		// Set up listeners on text fields and buttons
 		textUrl.getDocument().addDocumentListener(this);
 		textUsername.getDocument().addDocumentListener(this);
 		textPassword.getDocument().addDocumentListener(this);
 		textFilePath.getDocument().addDocumentListener(this);
+		
 		buttonOk.addActionListener(this);
 		buttonCancel.addActionListener(this);
-
-		// Set size and position
-		setSize(400, 200);
-		setLocationRelativeTo(parent);
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -94,12 +70,12 @@ public class SubversionDialog extends JDialog implements ActionListener, Documen
 			username = textUsername.getText().trim();
 			password = new String(textPassword.getPassword());
 			filePath = textFilePath.getText().trim();
-			dispose();
+			((JDialog) dialog).dispose();
 		}
 		
 		// Handle click on the Cancel button
 		else if (e.getSource() == buttonCancel) {
-			dispose();
+			((JDialog) dialog).dispose();
 		}
 	}
 
@@ -141,5 +117,9 @@ public class SubversionDialog extends JDialog implements ActionListener, Documen
 	}
 
 	private static final long serialVersionUID = 1L;
+
+	public void setVisible(boolean b) {
+		dialog.setVisible(b);
+	}
 
 }

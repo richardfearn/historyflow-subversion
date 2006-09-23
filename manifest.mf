@@ -1,3 +1,3 @@
 PluginClass: uk.co.richardfearn.historyflow.subversion.SubversionHistoryProvider
 RequiresJTidy: false
-Class-Path: javasvn.jar
+Class-Path: javasvn.jar swixml.jar jdom.jar
