@@ -3,6 +3,8 @@ package uk.co.richardfearn.historyflow.subversion;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.net.URL;
 
 import javax.swing.JButton;
@@ -10,8 +12,6 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import org.swixml.SwingEngine;
 
@@ -20,7 +20,7 @@ import org.swixml.SwingEngine;
  * 
  * @author Richard Fearn
  */
-public class SubversionDialog implements ActionListener, DocumentListener {
+public class SubversionDialog implements ActionListener, KeyListener {
 
 	private String url;
 
@@ -56,25 +56,29 @@ public class SubversionDialog implements ActionListener, DocumentListener {
 		textFilePath.setText(defaultFilePath);
 		setOkButtonState();
 
-		textUrl.getDocument().addDocumentListener(this);
-		textUsername.getDocument().addDocumentListener(this);
-		textPassword.getDocument().addDocumentListener(this);
-		textFilePath.getDocument().addDocumentListener(this);
+		textUrl.addKeyListener(this);
+		textUsername.addKeyListener(this);
+		textPassword.addKeyListener(this);
+		textFilePath.addKeyListener(this);
 		
 		buttonOk.addActionListener(this);
 		buttonCancel.addActionListener(this);
 		
 		((JDialog) dialog).pack();
 	}
+	
+	private void okPressed() {
+		url = textUrl.getText().trim();
+		username = textUsername.getText().trim();
+		password = new String(textPassword.getPassword());
+		filePath = textFilePath.getText().trim();
+		((JDialog) dialog).dispose();
+	}
 
 	public void actionPerformed(ActionEvent e) {
 		// Handle click on the OK button
 		if (e.getSource() == buttonOk) {
-			url = textUrl.getText().trim();
-			username = textUsername.getText().trim();
-			password = new String(textPassword.getPassword());
-			filePath = textFilePath.getText().trim();
-			((JDialog) dialog).dispose();
+			okPressed();
 		}
 		
 		// Handle click on the Cancel button
@@ -83,23 +87,16 @@ public class SubversionDialog implements ActionListener, DocumentListener {
 		}
 	}
 
-	public void changedUpdate(DocumentEvent e) {
-		setOkButtonState();
-	}
-
-	public void insertUpdate(DocumentEvent e) {
-		setOkButtonState();
-	}
-
-	public void removeUpdate(DocumentEvent e) {
-		setOkButtonState();
+	// Determine validity of what's been entered
+	private boolean isOk() {
+		boolean gotUrl = textUrl.getText().trim().length() > 0;
+		boolean gotFilePath = textFilePath.getText().trim().length() > 0;
+		return (gotUrl && gotFilePath);
 	}
 
 	// Update enabled state of OK button
 	private void setOkButtonState() {
-		boolean gotUrl = textUrl.getText().trim().length() > 0;
-		boolean gotFilePath = textFilePath.getText().trim().length() > 0;
-		buttonOk.setEnabled(gotUrl && gotFilePath);
+		buttonOk.setEnabled(isOk());
 	}
 
 	public String getUrl() {
@@ -118,10 +115,25 @@ public class SubversionDialog implements ActionListener, DocumentListener {
 		return filePath;
 	}
 
-	private static final long serialVersionUID = 1L;
-
 	public void setVisible(boolean b) {
 		dialog.setVisible(b);
 	}
+
+	public void keyPressed(KeyEvent e) {
+		setOkButtonState();
+	}
+
+	public void keyReleased(KeyEvent e) {
+		setOkButtonState();
+		if (e.getKeyCode() == KeyEvent.VK_ENTER && isOk()) {
+			okPressed();
+		}
+	}
+
+	public void keyTyped(KeyEvent e) {
+		setOkButtonState();
+	}
+
+	private static final long serialVersionUID = 1L;
 
 }
