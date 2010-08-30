@@ -1,0 +1,6 @@
+# Copy this file to "build.properties" and customise as needed
+
+historyflow.dir=
+
+version=1.0.0
+plugin.jar=subversion-plugin-${version}.jar
