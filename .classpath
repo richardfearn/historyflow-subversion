@@ -2,8 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Program Files/History Flow Visualization/historyflow.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files/History Flow Visualization/plugins/javasvn.jar"/>
-	<classpathentry kind="lib" path="C:/Program Files/History Flow Visualization/plugins/swixml.jar"/>
+	<classpathentry kind="lib" path="lib/historyflow.jar"/>
+	<classpathentry kind="lib" path="lib/svnkit.jar"/>
+	<classpathentry kind="lib" path="lib/swixml.jar"/>
+	<classpathentry kind="lib" path="lib/jdom.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
