@@ -1,0 +1,29 @@
+This is a Subversion plugin for History Flow, which can be found at:
+
+  http://www.alphaworks.ibm.com/tech/historyflow
+  http://researchweb.watson.ibm.com/visual/projects/history_flow/
+
+The plugin allows you to use History Flow to view the history of a file
+in a Subversion repository. svn:// and http:// repositories are
+supported.
+
+To build the plugin a few thirdparty libraries are required. They are
+included with this project:
+
+ * SVNKit 1.3.4
+ * SwiXml 1.5 build 149
+ * JDOM (from the SwiXml download)
+ * History Flow
+
+The project should build using Eclipse. To deploy the plugin, copy
+build.properties.default to build.properties and set the value of
+historyflow.dir. Then run:
+
+  $ ant deploy-plugin-jar
+
+For convenience, you can then run History Flow with:
+
+  $ ant run-historyflow
+
+Richard Fearn
+richardfearn@gmail.com
