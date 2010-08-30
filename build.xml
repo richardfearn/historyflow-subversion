@@ -21,6 +21,13 @@
 	
 	<target name="deploy-plugin-jar" depends="make-plugin-jar">
 		<copy file="build/${plugin.jar}" todir="${historyflow.dir}/plugins" overwrite="yes" />
+		<copy todir="${historyflow.dir}/plugins">
+			<fileset dir="lib">
+				<include name="jdom.jar" />
+				<include name="svnkit.jar" />
+				<include name="swixml.jar" />
+			</fileset>
+		</copy>
 	</target>
 	
 	<target name="run-historyflow" depends="deploy-plugin-jar">
